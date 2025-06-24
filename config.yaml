@@ -1,0 +1,13 @@
+repos:
+  - url: https://github.com/your-org/repo1.git
+    dest: repo1
+  - url: https://github.com/your-org/repo2.git
+    # dest will default to "repo2" if omitted
+  - url: https://github.com/huggingface/lerobot.git
+    dest: lerobot
+
+commands:
+  - cd repo1 && npm install && npm run build
+  - cd repo2 && ./setup.sh
+  - cd lerobot && pip install -r requirements.txt && python setup.py install
+  - echo "All repos cloned and configured!"
