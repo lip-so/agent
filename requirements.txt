@@ -1,5 +1,14 @@
-Flask==3.0.0
-pyserial==3.5
-opencv-python==4.8.1.78
-numpy==1.24.3
-requests==2.31.0 
+# LeRobot Installer Dependencies
+
+# The desktop installer (robot_installer.py) uses only built-in Python libraries:
+# - tkinter (GUI framework)
+# - threading (for responsive UI)
+# - subprocess (for running commands)
+# - os, sys, shutil, pathlib (file operations)
+# - time (timestamps and delays)
+
+# No additional pip packages are required for the installer to run!
+# The installer will handle all LeRobot dependencies automatically.
+
+# Optional: If you want to package as a standalone executable
+# pyinstaller>=5.0 

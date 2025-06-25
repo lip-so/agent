@@ -1,160 +1,174 @@
-# 🤖 LeRobot Setup Agent
+# 🤖 LeRobot Installer
 
-An automated setup assistant for LeRobot installations with minimal user interaction. This tool provides a web-based interface to guide users through the complete LeRobot setup process including installation, port discovery, motor configuration, and calibration.
+An automated GUI application that installs LeRobot with all dependencies in one click.
 
-## Features
+## What This App Does
 
-- 🌐 **Web-based Interface**: Modern, intuitive web UI for easy interaction
-- 🔄 **Automated Installation**: Automatically installs LeRobot and dependencies
-- 🔍 **Port Discovery**: Finds and lists available USB ports for robot connections
-- ⚙️ **Motor Configuration**: Guides through motor setup for both leader and follower arms
-- 📏 **Robot Calibration**: Assists with robot calibration process
-- 📊 **Real-time Progress**: Live status updates and progress tracking
-- 💾 **Configuration Saving**: Saves robot configurations for future use
+This installer automatically handles the complete LeRobot installation process:
+
+1. **System Check** - Verifies git and conda are installed
+2. **Repository Clone** - Downloads LeRobot from GitHub (`git clone https://github.com/huggingface/lerobot.git`)
+3. **Environment Setup** - Creates conda environment with Python 3.10 (`conda create -y -n lerobot python=3.10`)
+4. **FFmpeg Installation** - Installs ffmpeg via conda-forge (`conda install ffmpeg -c conda-forge`)
+5. **LeRobot Installation** - Installs the main package (`pip install -e .`)
+6. **Dynamixel SDK** - Installs motor control SDK (`pip install -e ".[dynamixel]"`)
+7. **System Dependencies** - Installs platform-specific build tools
+8. **Verification** - Tests the installation
+
+### Motor Configuration (After Installation)
+
+The installer also includes a motor configuration tool that helps you:
+
+- **Find USB Ports** - Automatically discovers robot arm USB connections
+- **Interactive Setup** - Guides you through unplugging/reconnecting arms
+- **Port Identification** - Uses `python lerobot/find_port.py` to identify ports
+- **Step-by-step Process** - Clear instructions for follower and leader arm setup
 
 ## Prerequisites
 
-- Python 3.8 or higher
-- USB ports for robot connections
-- LeRobot-compatible hardware (Koch arms, etc.)
+Before running the installer, make sure you have:
 
-## Quick Start
+- **Git** - Download from [git-scm.com](https://git-scm.com/)
+- **Conda** - Download Miniconda from [docs.conda.io](https://docs.conda.io/en/latest/miniconda.html)
+- **Python 3.6+** - Usually comes with conda
 
-### Option 1: Automated Installation (Recommended)
+## Download & Run
 
-1. Clone or download this repository
-2. Run the installation script:
+### Option 1: Run Desktop Installer
+
+**Beautiful desktop app with Tune Robotics design:**
+1. Download `robot_installer.py`
+2. Open terminal/command prompt  
+3. Navigate to download directory
+4. Run: `python robot_installer.py`
+
+### Option 2: Create Executable (Advanced)
+
+To create a standalone executable:
 
 ```bash
-chmod +x install.sh
-./install.sh
+# Install PyInstaller
+pip install pyinstaller
+
+# Create executable (GUI version)
+pyinstaller --onefile --windowed robot_installer.py
+
+# The executable will be in the 'dist' folder
 ```
 
-3. Open your browser to `http://localhost:5000`
-4. Follow the web interface to complete your robot setup
+## How to Use
 
-### Option 2: Manual Installation
+1. **Launch the app** - Run `python robot_installer.py` or double-click the executable
+2. **Review installation info** - Check the installation directory and steps
+3. **Click "Start Installation"** - The app will handle everything automatically
+4. **Monitor progress** - Watch the visual progress indicators and detailed log output
+5. **Installation complete** - Follow the final instructions to start using LeRobot
+6. **Configure Motors** - Click "Configure Motors" to set up robot hardware (if applicable)
 
-1. Create a virtual environment:
+## Installation Directory
+
+By default, LeRobot will be installed to:
+- **Windows**: `C:\Users\[username]\lerobot`
+- **macOS**: `/Users/[username]/lerobot`
+- **Linux**: `/home/[username]/lerobot`
+
+**🔧 Change Directory**: Click the "Change Directory" button in the installer to choose a different installation location before starting the installation.
+
+## After Installation
+
+Once installation is complete:
+
+1. Open terminal/command prompt
+2. Activate the environment: `conda activate lerobot`
+3. Navigate to LeRobot: `cd ~/lerobot` (or your install directory)
+4. **Configure Motors** (if you have robot hardware):
+   - Click "Configure Motors" in the installer
+   - Follow the interactive prompts to identify USB ports
+   - The app will guide you through unplugging/reconnecting arms
+5. Start using LeRobot!
+
+## Platform-Specific Notes
+
+### Linux
+The installer will attempt to install build dependencies:
 ```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+sudo apt-get install cmake build-essential python3-dev pkg-config
+sudo apt-get install libavformat-dev libavcodec-dev libavdevice-dev
+sudo apt-get install libavutil-dev libswscale-dev libswresample-dev libavfilter-dev
 ```
 
-2. Install dependencies:
+### macOS
+If you have Homebrew installed, the app will install:
 ```bash
-pip install -r requirements.txt
+brew install cmake pkg-config
 ```
 
-3. Start the server:
-```bash
-python robot_setup_server.py
-```
-
-4. Open `http://localhost:5000` in your browser
-
-## Usage Guide
-
-### Step 1: Install LeRobot
-- Click "Start Installation" to automatically install LeRobot and Dynamixel SDK
-- Progress will be shown in real-time
-- Installation typically takes 2-5 minutes depending on your internet connection
-
-### Step 2: Discover USB Ports
-- Connect your robot's USB cables
-- Click "Discover Ports" to scan for available ports
-- The system will list all detected USB ports
-
-### Step 3: Configure Motors
-- Select whether you're setting up a "Leader" or "Follower" arm
-- Choose the appropriate USB port from the discovered list
-- Enter a unique robot ID (e.g., "my_awesome_follower_arm")
-- Click "Setup Motors" to begin motor configuration
-
-**Note**: Motor setup requires manual intervention. You'll need to connect motors one by one as prompted in the terminal output.
-
-### Step 4: Calibrate Robot
-- After motor configuration, click "Start Calibration"
-- Follow the on-screen instructions to move the robot through its calibration sequence
-- This ensures accurate position mapping between leader and follower arms
-
-## Configuration Files
-
-The system creates the following configuration files:
-
-- `robot_config.json`: Stores your robot configuration settings
-- Various LeRobot configuration files in the `lerobot/` directory
+### Windows
+Additional dependencies may need manual installation for some features.
 
 ## Troubleshooting
 
-### Common Issues
+### "Git not found"
+- Install Git from [git-scm.com](https://git-scm.com/)
+- Make sure Git is in your system PATH
 
-**Port Discovery Fails**
-- Ensure USB cables are properly connected
-- Check that your system recognizes the USB devices
-- Try unplugging and reconnecting USB cables
+### "Conda not found"
+- Install Miniconda from [docs.conda.io](https://docs.conda.io/en/latest/miniconda.html)
+- Restart your terminal after installation
 
-**Motor Setup Hangs**
-- Follow the terminal prompts carefully
-- Ensure only one motor is connected at a time during setup
-- Check power connections to the robot
+### "Permission denied"
+- On Linux/macOS, you may need to run: `chmod +x robot_installer.py`
+- For system dependencies, the installer may prompt for admin password
 
-**Installation Fails**
-- Ensure you have Python 3.8 or higher
-- Check your internet connection
-- Try running with administrator/sudo privileges if needed
+### Build Errors
+If you encounter build errors, manually install:
+- **Linux**: `sudo apt-get install cmake build-essential`
+- **macOS**: `xcode-select --install` or install Xcode from App Store
+- **Windows**: Install Visual Studio Build Tools
 
-### Getting Help
+## Features
 
-If you encounter issues:
-
-1. Check the terminal output for detailed error messages
-2. Ensure all hardware connections are secure
-3. Verify that your robot hardware is compatible with LeRobot
-4. Check the [LeRobot documentation](https://huggingface.co/docs/lerobot) for hardware-specific guidance
+- ✅ **One-click installation** - No manual commands needed
+- ✅ **Flexible installation directory** - Choose any location or use default ~/lerobot
+- ✅ **Real-time progress** - Visual progress bar and detailed logging
+- ✅ **Error handling** - Clear error messages and troubleshooting
+- ✅ **Cross-platform** - Works on Windows, macOS, and Linux
+- ✅ **Automatic cleanup** - Removes old installations before installing
+- ✅ **Verification** - Tests installation to ensure everything works
+- ✅ **Motor configuration** - Interactive USB port discovery for robot arms
+- ✅ **Hardware setup** - Guides through physical robot setup steps
+- ✅ **Modern design** - Beautiful Tune Robotics styled desktop interface
+- ✅ **Visual feedback** - Color-coded progress indicators and status updates
 
 ## Technical Details
 
-### Architecture
-
-- **Backend**: Flask web server with REST API
-- **Frontend**: Modern HTML/CSS/JavaScript interface with real-time updates
-- **Process Management**: Threaded execution for non-blocking operations
-- **Status Tracking**: Real-time progress monitoring and error handling
-
-### API Endpoints
-
-- `GET /api/status`: Get current setup status
-- `POST /api/install`: Start LeRobot installation
-- `POST /api/discover_ports`: Discover USB ports
-- `POST /api/setup_motors`: Configure robot motors
-- `POST /api/calibrate`: Start robot calibration
-- `POST /api/save_config`: Save robot configuration
-
-### File Structure
-
-```
-agent/
-├── robot_setup_server.py      # Main Flask application
-├── templates/
-│   └── index.html            # Web interface
-├── requirements.txt          # Python dependencies
-├── install.sh               # Automated installer
-├── README.md               # This file
-├── lerobot/               # LeRobot submodule
-└── venv/                 # Virtual environment (created during install)
-```
+- **GUI Framework**: Python Tkinter with custom Tune Robotics styling
+- **Dependencies**: None (pure Python with built-in libraries)
+- **Design System**: Dark navy theme with Roboto Mono typography
+- **Installation Location**: `~/lerobot`
+- **Conda Environment**: `lerobot` with Python 3.10
+- **Threading**: UI remains responsive during installation
+- **Visual Features**: Color-coded status indicators and real-time progress tracking
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
+To modify or improve the installer:
+
+1. Edit `robot_installer.py`
+2. Test on your platform
+3. Submit pull requests for improvements
 
 ## License
 
-This project follows the same license as the included LeRobot submodule (Apache 2.0).
+This installer follows the same license as the LeRobot project.
 
-## Acknowledgments
+## Support
 
-- Built on top of [🤗 LeRobot](https://github.com/huggingface/lerobot)
-- Designed for ease of use with robotic hardware setup
-- Inspired by the need for simplified robotics onboarding 
+For issues with:
+- **The installer itself**: Check this README and troubleshooting section
+- **LeRobot functionality**: Visit the [LeRobot repository](https://github.com/huggingface/lerobot)
+- **Conda/Git installation**: Check official documentation
+
+---
+
+**Happy Robot Building! 🤖** 
