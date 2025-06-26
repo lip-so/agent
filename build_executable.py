@@ -17,8 +17,7 @@ def check_pyinstaller():
         return False
 
 def install_pyinstaller():
-    """Install PyInstaller"""
-    print("Installing PyInstaller...")
+    print("Installing PyInstaller")
     result = subprocess.run([sys.executable, "-m", "pip", "install", "pyinstaller"], 
                           capture_output=True, text=True)
     return result.returncode == 0
@@ -26,8 +25,6 @@ def install_pyinstaller():
 def build_executable():
     """Build the executable using PyInstaller"""
     print("Building executable...")
-    
-    # PyInstaller command
     cmd = [
         "pyinstaller",
         "--onefile",           # Create a single executable
@@ -56,7 +53,7 @@ def build_executable():
             print("⚠️ Executable was built but not found in expected location")
             
     else:
-        print("❌ Failed to build executable")
+        print("Failed to build executable")
         print("Error output:")
         print(result.stderr)
         return False
@@ -69,7 +66,7 @@ def main():
     
     # Check if robot_installer.py exists
     if not os.path.exists("robot_installer.py"):
-        print("❌ Error: robot_installer.py not found")
+        print(" Error: robot_installer.py not found")
         print("Make sure you're running this from the correct directory")
         return
     
@@ -77,12 +74,12 @@ def main():
     if not check_pyinstaller():
         print("PyInstaller not found. Installing...")
         if not install_pyinstaller():
-            print("❌ Failed to install PyInstaller")
+            print("Failed to install PyInstaller")
             print("Please install it manually: pip install pyinstaller")
             return
-        print("✅ PyInstaller installed")
+        print("PyInstaller installed")
     else:
-        print("✅ PyInstaller found")
+        print("PyInstaller found")
     
     # Build executable
     if build_executable():
@@ -100,9 +97,9 @@ def main():
                 os.remove(spec_file)
                 print("🗑️ Removed spec file")
                 
-            print("✅ Cleanup completed")
+            print("Cleanup completed")
     else:
-        print("\n❌ Build failed")
+        print("Build failed")
 
 if __name__ == "__main__":
     main() 
