@@ -12,7 +12,7 @@ class WelcomeScreen:
         
         self.colors = {
             'background': '#000b2a', 'text_primary': '#e0e8f2',
-            'text_secondary': '#8c9bb3', 'accent': '#3025ff',
+            'text_secondary': '#8c9bb3', 'accent': '#87CEFA',
             'surface': '#0d193b', 'border': '#1a274c',
             'hover': '#2a3f6b'
         }

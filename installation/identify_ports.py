@@ -11,14 +11,13 @@ LEROBOT_SCRIPT_PATH = os.path.join(_LEROBOT_DIR, "find_port.py")
 def clear_screen():
     """Clears the console screen for better readability."""
     os.system('cls' if os.name == 'nt' else 'clear')
-
+    
 def find_single_port(device_name: str) -> str | None:
-
     title = f"Let's identify the {device_name.upper()} port"
     print("+" + "-" * (len(title) + 2) + "+")
     print(f"| {title} |")
     print("+" + "-" * (len(title) + 2) + "+")
-    print("\nStarting the port detection tool...")
+    print("\nStarting the port detection")
 
     try:
         process = subprocess.Popen(
@@ -37,13 +36,12 @@ def find_single_port(device_name: str) -> str | None:
         print(f"\n[ERROR] Failed to start the script: {e}")
         return None
 
-    print("\n" + "="*50)
     print(">>> ACTION REQUIRED <<<")
     print(f"Please UNPLUG the USB cable from the '{device_name}' robot.")
     print("After unplugging the cable, press the ENTER key here to continue.")
     print("="*50)
     
-    # This acts like a button. The program waits here until the user presses Enter.
+
     input() 
 
     # By sending a newline character to the script's standard input,
@@ -77,9 +75,6 @@ def find_single_port(device_name: str) -> str | None:
 
 
 def main():
-    """
-    Main function to run the complete port identification workflow.
-    """
     clear_screen()
     print("Welcome to the Robot Port Identification Helper!")
     print("This program will guide you to find the correct USB ports for your robots.")

@@ -23,21 +23,40 @@ class InstallerUI:
         self.setup_ui()
 
     def setup_fonts(self):
+        """Setup fonts using Roboto Mono (Google Fonts) with fallbacks"""
+        # Check for available monospace fonts with preference for Roboto Mono
+        font_families = ["Roboto Mono", "Source Code Pro", "Monaco", "Menlo", "Consolas", "Courier New", "monospace"]
+        selected_family = "Courier"  # Default fallback
+        
+        # Test each font family to see if it's available
+        for font_family in font_families:
+            try:
+                test_font = font.Font(family=font_family, size=12)
+                # If we can create the font successfully, use this family
+                selected_family = font_family
+                break
+            except tk.TclError:
+                continue
+        
         try:
-            self.font_logo = font.Font(family='Roboto Mono', size=15, weight='bold')
-            self.font_super_title = font.Font(family='Roboto Mono', size=36, weight='bold')
-            self.font_title = font.Font(family='Roboto Mono', size=22, weight='bold')
-            self.font_subtitle = font.Font(family='Roboto Mono', size=13)
-            self.font_body = font.Font(family='Roboto Mono', size=12)
-            self.font_small = font.Font(family='Roboto Mono', size=10)
-            self.font_button = font.Font(family='Roboto Mono', size=13, weight='bold')
-        except tk.TclError:
+            self.font_logo = font.Font(family=selected_family, size=15, weight='bold')
+            self.font_super_title = font.Font(family=selected_family, size=36, weight='bold')
+            self.font_title = font.Font(family=selected_family, size=22, weight='bold')
+            self.font_subtitle = font.Font(family=selected_family, size=13, weight='normal')
+            self.font_body = font.Font(family=selected_family, size=12, weight='normal')
+            self.font_small = font.Font(family=selected_family, size=10, weight='normal')
+            self.font_button = font.Font(family=selected_family, size=13, weight='bold')
+            
+            print(f"Using font family: {selected_family}")
+        except tk.TclError as e:
+            print(f"Font setup error: {e}, falling back to system defaults")
+            # Ultimate fallback to system defaults
             self.font_logo = font.Font(size=15, weight='bold')
             self.font_super_title = font.Font(size=36, weight='bold')
             self.font_title = font.Font(size=22, weight='bold')
-            self.font_subtitle = font.Font(size=13)
-            self.font_body = font.Font(size=12)
-            self.font_small = font.Font(size=10)
+            self.font_subtitle = font.Font(size=13, weight='normal')
+            self.font_body = font.Font(size=12, weight='normal')
+            self.font_small = font.Font(size=10, weight='normal')
             self.font_button = font.Font(size=13, weight='bold')
 
     def setup_ui(self):
@@ -159,9 +178,9 @@ class InstallerUI:
         start_x = (1000 - total_width) // 2
 
         buttons = {
-            'install': {'text': "📤 Install", 'pos': (start_x, y, start_x + w, y + h)},
-            'motor': {'text': "🎯 Find Ports", 'pos': (start_x + w, y, start_x + w * 2, y + h)},
-            'setup': {'text': "⚙️ Set Up Motors", 'pos': (start_x + w * 2, y, start_x + w * 3, y + h)},
+            'install': {'text': "Install", 'pos': (start_x, y, start_x + w, y + h)},
+            'motor': {'text': " Find Ports", 'pos': (start_x + w, y, start_x + w * 2, y + h)},
+            'setup': {'text': "Set Up Motors", 'pos': (start_x + w * 2, y, start_x + w * 3, y + h)},
         }
         
         self.button_widgets = {}
@@ -176,8 +195,8 @@ class InstallerUI:
         self.canvas.create_line(start_x + w, y + 10, start_x + w, y + h - 10, fill=self.colors['border'])
         self.canvas.create_line(start_x + w * 2, y + 10, start_x + w * 2, y + h - 10, fill=self.colors['border'])
             
-        self.set_button_state('motor', '🎯 Find Ports', 'text_secondary')
-        self.set_button_state('setup', '⚙️ Set Up Motors', 'text_secondary')
+        self.set_button_state('motor', 'Find Ports', 'text_secondary')
+        self.set_button_state('setup', ' Set Up Motors', 'text_secondary')
 
     def _create_status_section(self):
         self.status_text_id = self.canvas.create_text(500, 600, text="Welcome to the LeRobot Installer", font=self.font_small, fill=self.colors['text_secondary'], anchor='center')

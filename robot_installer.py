@@ -60,7 +60,7 @@ class LeRobotInstaller:
         if self._installation_exists():
             self.installation_complete = True
             self.ui.set_button_state('install', 'Installed', 'text_secondary')
-            self.ui.set_button_state('motor', '🎯 Find Ports', 'text_primary')
+            self.ui.set_button_state('motor', 'Find Ports', 'text_primary')
             self.ui.update_progress(8, 8, "Existing installation detected.")
 
     def _installation_exists(self):
