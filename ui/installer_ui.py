@@ -4,6 +4,7 @@ from PIL import ImageTk, Image
 import os
 
 class InstallerUI:
+    """Handles the UI creation and state for the LeRobot Installer."""
 
     def __init__(self, root, controller):
         self.root = root
@@ -23,15 +24,24 @@ class InstallerUI:
         self.setup_ui()
 
     def setup_fonts(self):
+        """Initializes the fonts used throughout the application."""
+        font_family = "Roboto Mono"
         try:
-            self.font_logo = font.Font(family='Roboto Mono', size=15, weight='bold')
-            self.font_super_title = font.Font(family='Roboto Mono', size=36, weight='bold')
-            self.font_title = font.Font(family='Roboto Mono', size=22, weight='bold')
-            self.font_subtitle = font.Font(family='Roboto Mono', size=13)
-            self.font_body = font.Font(family='Roboto Mono', size=12)
-            self.font_small = font.Font(family='Roboto Mono', size=10)
-            self.font_button = font.Font(family='Roboto Mono', size=13, weight='bold')
+            # Check if font is available
+            font.nametofont(font_family)
         except tk.TclError:
+            font_family = "Courier" # A common monospace fallback
+
+        try:
+            self.font_logo = font.Font(family=font_family, size=15, weight='bold')
+            self.font_super_title = font.Font(family=font_family, size=36, weight='bold')
+            self.font_title = font.Font(family=font_family, size=22, weight='bold')
+            self.font_subtitle = font.Font(family=font_family, size=13)
+            self.font_body = font.Font(family=font_family, size=12)
+            self.font_small = font.Font(family=font_family, size=10)
+            self.font_button = font.Font(family=font_family, size=13, weight='bold')
+        except tk.TclError:
+            # Fallback fonts if specific styles fail
             self.font_logo = font.Font(size=15, weight='bold')
             self.font_super_title = font.Font(size=36, weight='bold')
             self.font_title = font.Font(size=22, weight='bold')
@@ -154,14 +164,15 @@ class InstallerUI:
         self.port_finder_canvas.itemconfig(self.port_finder_button_widget['bg'], fill=self.colors['surface'])
 
     def _create_main_buttons(self):
-        y, h, w = 530, 44, 130
-        total_width = w * 3
+        y, h, w = 530, 44, 120  
+        total_width = w * 4
         start_x = (1000 - total_width) // 2
 
         buttons = {
-            'install': {'text': "📤 Install", 'pos': (start_x, y, start_x + w, y + h)},
-            'motor': {'text': "🎯 Find Ports", 'pos': (start_x + w, y, start_x + w * 2, y + h)},
-            'setup': {'text': "⚙️ Set Up Motors", 'pos': (start_x + w * 2, y, start_x + w * 3, y + h)},
+            'install': {'text': "Install", 'pos': (start_x, y, start_x + w, y + h)},
+            'motor': {'text': "Find Ports", 'pos': (start_x + w, y, start_x + w * 2, y + h)},
+            'setup': {'text': "Set Up Motors", 'pos': (start_x + w * 2, y, start_x + w * 3, y + h)},
+            'test': {'text': "Test Robot", 'pos': (start_x + w * 3, y, start_x + w * 4, y + h)},
         }
         
         self.button_widgets = {}
@@ -173,11 +184,15 @@ class InstallerUI:
             self.button_widgets[name] = {'bg': bg, 'text': text}
             self.button_coords[name] = B['pos']
 
+        # Add dividers
         self.canvas.create_line(start_x + w, y + 10, start_x + w, y + h - 10, fill=self.colors['border'])
         self.canvas.create_line(start_x + w * 2, y + 10, start_x + w * 2, y + h - 10, fill=self.colors['border'])
+        self.canvas.create_line(start_x + w * 3, y + 10, start_x + w * 3, y + h - 10, fill=self.colors['border'])
             
-        self.set_button_state('motor', '🎯 Find Ports', 'text_secondary')
-        self.set_button_state('setup', '⚙️ Set Up Motors', 'text_secondary')
+        # Initially disable buttons
+        self.set_button_state('motor', 'Find Ports', 'text_secondary')
+        self.set_button_state('setup', 'Set Up Motors', 'text_secondary')
+        self.set_button_state('test', 'Test Robot', 'text_secondary')
 
     def _create_status_section(self):
         self.status_text_id = self.canvas.create_text(500, 600, text="Welcome to the LeRobot Installer", font=self.font_small, fill=self.colors['text_secondary'], anchor='center')

@@ -12,3 +12,9 @@
 
 # Optional: If you want to package as a standalone executable
 # pyinstaller>=5.0 
+
+flask
+flask-cors
+Pillow
+pyserial
+draccus 

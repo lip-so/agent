@@ -4,8 +4,6 @@ import os
 import sys
 import time
 
-# Make the script path robust to where it's run from.
-# It assumes identify_ports.py is in `.../lerobot/lerobot/scripts` and find_port.py is in `.../lerobot`.
 _SCRIPT_FILE = os.path.abspath(__file__)
 _LEROBOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(_SCRIPT_FILE)))
 LEROBOT_SCRIPT_PATH = os.path.join(_LEROBOT_DIR, "find_port.py")
@@ -93,22 +91,15 @@ def main():
         print("Please ensure the 'lerobot' directory and its 'find_port.py' script exist.")
         sys.exit(1)
 
-    # --- Step 1: Find Follower Port ---
     follower_port = find_single_port("follower")
     
-    # Add a separator before the next step
-    print("\n" + "#" * 60 + "\n")
     input("Press ENTER to proceed to the next step...")
     clear_screen()
 
-    # --- Step 2: Find Leader Port ---
     leader_port = find_single_port("leader")
 
-    # --- Final Summary ---
     clear_screen()
-    print("=" * 60)
     print("Identification Process Complete!")
-    print("=" * 60)
     print("\nHere is a summary of the identified ports:\n")
 
     print(f"  Follower Port: {follower_port if follower_port else '--- NOT IDENTIFIED ---'}")
@@ -118,7 +109,7 @@ def main():
         print("\nBoth ports were successfully identified.")
         print("You can now use these values in your robot's configuration files.")
     else:
-        print("\nOne or more ports could not be identified.")
+        print("One or more ports could not be identified.")
         print("Please run the script again and follow the instructions carefully.")
 
 
